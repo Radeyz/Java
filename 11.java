@@ -42,7 +42,7 @@ public class mainClass {
 
     public static class myFrame {
 
-        JFrame mainFrame = new JFrame("РђР»РіРѕСЂРёС‚Рј Р¤РѕСЂРґР° - Р‘РµР»Р»РјР°РЅР°");
+        JFrame mainFrame = new JFrame("Алгоритм Форда - Беллмана");
         String labelstr = new String("1");
         JTextArea textAr = new JTextArea();
         
@@ -53,11 +53,11 @@ public class mainClass {
         //Graph leftPanel = new Graph();	//FACEPALM
         JPanel rightPanel = new JPanel();
         JToolBar upperPanel = new JToolBar();
-        JButton b_nextStep = new JButton("РЎС‚Р°СЂС‚");
-        JButton button1 = new JButton("Р—Р°РіСЂСѓР·РёС‚СЊ");
-        JButton button2 = new JButton("РќР°СЂРёСЃРѕРІР°С‚СЊ");
-        JButton button3 = new JButton("РЎРїСЂР°РІРєР°");
-        JButton button4 = new JButton("РЎР±СЂРѕСЃРёС‚СЊ");
+        JButton b_nextStep = new JButton("Старт");
+        JButton button1 = new JButton("Загрузить");
+        JButton button2 = new JButton("Нарисовать");
+        JButton button3 = new JButton("Справка");
+        JButton button4 = new JButton("Сбросить");
         
         Border bord =  BorderFactory.createLineBorder(Color.black, 1);        
         public  void createFrame(){
@@ -83,7 +83,7 @@ public class mainClass {
             	model.setColumnCount(0);
             	labelstr = "1";
             	b_nextStep.setEnabled(true);
-            	b_nextStep.setText("РЎС‚Р°СЂС‚");
+            	b_nextStep.setText("Старт");
             	button1.setEnabled(true);
             	button2.setEnabled(true);
             	buttonRFFPressed = false;
@@ -95,16 +95,16 @@ public class mainClass {
             public void actionPerformed(ActionEvent e) {
          
             	String name = b_nextStep.getText();
-            	if (name.equals("РЎС‚Р°СЂС‚"))
+            	if (name.equals("Старт"))
             	{
-            		model.addColumn("РЁР°Рі");
+            		model.addColumn("Шаг");
                     for(int i= 0;i<g.getN();i++){
                     	model.addColumn(""+(i+1));
                     }
-            		int source = Integer.parseInt(JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ РёСЃС…РѕРґРЅСѓСЋ РІРµСЂС€РёРЅСѓ"));
+            		int source = Integer.parseInt(JOptionPane.showInputDialog("Введите исходную вершину"));
             		if (g.isNegativeCycle(source)) 
-                		JOptionPane.showMessageDialog(null, "Р’ РіСЂР°С„Рµ РµСЃС‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№ С†РёРєР»"
-                				+ "\n Р‘СѓРґРµС‚ РІС‹РїРѕР»РЅРµРЅРѕ n-1 С€Р°РіРѕРІ", "Р—Р°РіСЂСѓР·РєР°", JOptionPane.INFORMATION_MESSAGE);	
+                		JOptionPane.showMessageDialog(null, "В графе есть отрицательный цикл"
+                				+ "\n Будет выполнено n-1 шагов", "Загрузка", JOptionPane.INFORMATION_MESSAGE);	
             		g.Ford_Bellman(source);
             		button1.setEnabled(false);
             		button2.setEnabled(false);
@@ -114,9 +114,9 @@ public class mainClass {
                 int[] dl = g.get_table();
                 String[] _dl= new String[dl.length+1];
                 textAr.replaceRange("", 0, textAr.getSelectionEnd());
-                textAr.insert("РЁР°Рі " + labelstr + "\n", textAr.getSelectionEnd());
-                textAr.insert("Р Р°СЃСЃРјР°С‚СЂРёРІР°РµРјРѕРµ СЂРµР±СЂРѕ: "+g.getEdges()+"\n",textAr.getSelectionEnd() );
-                textAr.insert("РЎРїРёСЃРѕРє СЂРµР±РµСЂ:\n", textAr.getSelectionEnd());
+                textAr.insert("Шаг " + labelstr + "\n", textAr.getSelectionEnd());
+                textAr.insert("Рассматриваемое ребро: "+g.getEdges()+"\n",textAr.getSelectionEnd() );
+                textAr.insert("Список ребер:\n", textAr.getSelectionEnd());
                 i = Integer.valueOf(labelstr);
                 _dl[0]= Integer.toString(i-1);
                 for (int j = 0; j<dl.length; j++){
@@ -138,11 +138,11 @@ public class mainClass {
                 	for (int j = 1; j <= g.getN(); j++)
                 		g.setColor(j, 0);
                 	
-                    b_nextStep.setText("РљРѕРЅРµС† Р°Р»РіРѕСЂРёС‚РјР°");
+                    b_nextStep.setText("Конец алгоритма");
                     b_nextStep.setEnabled(false);
                 }
                 else{
-                    b_nextStep.setText("РЎР»РµРґСѓСЋС‰РёР№ С€Р°Рі");
+                    b_nextStep.setText("Следующий шаг");
                 }
                 labelstr = Integer.toString(++i);
                 g.drawGraph(leftPanel.getGraphics());
@@ -155,29 +155,29 @@ public class mainClass {
             	try{
             		
             		JFileChooser fileopen = new JFileChooser();
-            		int ret = fileopen.showDialog(null, "РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»");
+            		int ret = fileopen.showDialog(null, "Открыть файл");
             		if (ret == JFileChooser.APPROVE_OPTION) {
 	            		File file = fileopen.getSelectedFile();
 	            		
 	            		g = new Graph( file );
 	            		
-	            		JOptionPane.showMessageDialog(null, "Р”Р°РЅРЅС‹Рµ Р·Р°РіСЂСѓР¶РµРЅС‹.", "Р—Р°РіСЂСѓР·РєР°", JOptionPane.INFORMATION_MESSAGE);
+	            		JOptionPane.showMessageDialog(null, "Данные загружены.", "Загрузка", JOptionPane.INFORMATION_MESSAGE);
 	                    buttonRFFPressed = true;
 	                    button2.setEnabled(false);
 	                    /*
-	                    model.addColumn("РЁР°Рі");
+	                    model.addColumn("Шаг");
 	                    for(int i= 0;i<g.getN();i++){
 	                    	model.addColumn(""+(i+1));
 	                    }
 	                    */
 	                    textAr.setFont(new Font("ARIAL", 0, 14));
-	                    textAr.insert("РЎРїРёСЃРѕРє СЂРµР±РµСЂ:\n", textAr.getSelectionEnd());
+	                    textAr.insert("Список ребер:\n", textAr.getSelectionEnd());
 	                    textAr.insert(g.getEdge(), textAr.getSelectionEnd());
                    // table = new JTable(model);
             		}
                     //String [] linesAsArray = lines.toArray(new String[lines.size()]);
                 } catch (FileNotFoundException e1) {
-                    JOptionPane.showMessageDialog(null, "Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ.", "Р—Р°РіСЂСѓР·РєР°", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Файл не найден.", "Загрузка", JOptionPane.WARNING_MESSAGE);
 
                 }
                 catch (IOException e1) {
@@ -191,9 +191,9 @@ public class mainClass {
         //Action listener to input date
         public class ButtonID implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-            	JOptionPane.showMessageDialog(null, "Р§С‚РѕР±С‹ РЅР°СЂРёСЃРѕРІР°С‚СЊ РІРµСЂС€РёРЅСѓ РєР»РёРєРЅРёС‚Рµ РґРІР° СЂР°Р·Р° РїРѕ Р±РµР»РѕР№ РѕР±Р»Р°СЃС‚Рё\n"
-            			+ "Р§С‚РѕР±С‹ СЃРѕРµРґРёРЅРёС‚СЊ РІРµСЂС€РёРЅС‹ РІС‹Р±РµСЂРёС‚Рµ РґРІРµ РІРµСЂС€РёРЅС‹\n"
-            			+ "Р’С‹Р±СЂР°С‚СЊ РІРµСЂС€РёРЅСѓ РјРѕР¶РЅРѕ РєР»РёРєРЅСѓРІ РїРѕ РЅРµР№, РѕРЅР° РѕРєСЂР°СЃРёС‚СЊСЃСЏ РІ СЃРёРЅРёР№ С†РІРµС‚", "РџРѕРјРѕС‰СЊ",JOptionPane.INFORMATION_MESSAGE );
+            	JOptionPane.showMessageDialog(null, "Чтобы нарисовать вершину кликните два раза по белой области\n"
+            			+ "Чтобы соединить вершины выберите две вершины\n"
+            			+ "Выбрать вершину можно кликнув по ней, она окраситься в синий цвет", "Помощь",JOptionPane.INFORMATION_MESSAGE );
                 button1.setEnabled(false);
                 buttonRFFPressed = false;
             }
@@ -201,8 +201,8 @@ public class mainClass {
         //Action listener to help
         public class ButtonHELP implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-                String HELP = "РљРЅРѕРїРєР° \"Р—Р°РіСЂСѓР·РёС‚СЊ\" Р·Р°РіСЂСѓР¶Р°РµС‚ РІРІРµРґРµРЅС‹Рµ Р·Р°СЂР°РЅРµРµ РґР°РЅРЅС‹Рµ;\n\nРљРЅРѕРїРєР° \"РќР°СЂРёСЃРѕРІР°С‚СЊ\"РїСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ Р’Р°Рј РІСЂСѓС‡РЅСѓСЋ Р·Р°РґР°С‚СЊ РіСЂР°С„;\n\nРљРЅРѕРїРєР° \"РЎС‚Р°СЂС‚\" РЅР°С‡РёРЅР°РµС‚ РІС‹РїРѕР»РЅРµРЅРёРµ Р°Р»РіРѕСЂРёС‚РјР°.";
-                JOptionPane.showMessageDialog(null, HELP, "РЎРїСЂР°РІРєР°", JOptionPane.INFORMATION_MESSAGE);
+                String HELP = "Кнопка \"Загрузить\" загружает введеные заранее данные;\n\nКнопка \"Нарисовать\"предоставляет возможность Вам вручную задать граф;\n\nКнопка \"Старт\" начинает выполнение алгоритма.";
+                JOptionPane.showMessageDialog(null, HELP, "Справка", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
@@ -249,7 +249,7 @@ public class mainClass {
 
             rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
             /*DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("РЁР°Рі");
+            model.addColumn("Шаг");
             for(int i= 1;i<=7;i++){
             	model.addColumn(""+i);
             }*/
@@ -307,16 +307,16 @@ public class mainClass {
         		int i = g.isInVert(x, y);
         		
         		if (e.getClickCount() == 2 && !g.alg)
-        		{//РґРѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ РІРµСЂС€РёРЅС‹
+        		{//добавление новой вершины
         			if (!g.isToClose(x, y))
         				g.addVert(x,y);
         			else 
-        				JOptionPane.showMessageDialog(null, "РЎР»РёС€РєРѕРј Р±Р»РёР·РєРѕ Рє РґСЂСѓРіРёРј РІРµСЂС€РёРЅР°Рј.", "Р’РІРѕРґ", JOptionPane.INFORMATION_MESSAGE);
+        				JOptionPane.showMessageDialog(null, "Слишком близко к другим вершинам.", "Ввод", JOptionPane.INFORMATION_MESSAGE);
         		}
         		else if (i != 0)
         		{
 	        		if (e.getButton() == MouseEvent.BUTTON1)
-	        		{//РІС‹Р±РѕСЂ РІРµСЂС€РёРЅС‹
+	        		{//выбор вершины
 	        			if (select1 == 0)
 	        			{
 	        				//g.setColor(select3, 0);
@@ -332,11 +332,11 @@ public class mainClass {
 	        				
 	        				try
 	        				{
-	        					w = Integer.parseInt(JOptionPane.showInputDialog("Р’РІРµРґРёС‚Рµ РІРµСЃ РІРµСЂС€РёРЅС‹"));
+	        					w = Integer.parseInt(JOptionPane.showInputDialog("Введите вес вершины"));
 	        				} 
 	        				catch (NumberFormatException exptn)
 	        				{
-	            				JOptionPane.showMessageDialog(null, "РќСѓР¶РЅРѕ РІРІРµСЃС‚Рё С‡РёСЃР»Рѕ.", "РћС€С‹Р±РєР°", JOptionPane.INFORMATION_MESSAGE);	
+	            				JOptionPane.showMessageDialog(null, "Нужно ввести число.", "Ошыбка", JOptionPane.INFORMATION_MESSAGE);	
 	            				g.setColor(select1, 0);
 		        				g.setColor(select2, 0);
 		        				select1 = select2 = 0;
@@ -373,28 +373,28 @@ public class mainClass {
 
 class Graph
 {
-	static int INF = 1400;		//С‡РёСЃР»Рѕ, РїСЂРёРЅРёРјР°РµРјРѕРµ Р·Р° Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ
-	static int MAX = 50;		//РјР°РєСЃ. С‡РёСЃР»Рѕ РІРµСЂС€РёРЅ
-	static int rad = 20;		//СЂР°РґРёСѓСЃ РІРµСЂС€РёРЅС‹
-	int n; 			//С‡РёСЃР»Рѕ РІРµСЂС€РёРЅ
-	int m; 			//С‡РёСЃР»Рѕ СЂРµР±РµСЂ
-	int k, u, v; 	//СЃС‡РµС‚С‡РёРєР° РґР»СЏ Р°Р»РіРѕСЂРёС‚РјР° Р¤Р‘.
-	int dl[]; 		//РјР°СЃСЃРёРІ РёР· РІСЂРµРјРµРЅРЅС‹С… РїРѕРјРµС‚РѕРє
-	int consEdge;   //РЅРѕРјРµСЂ СЂР°СЃСЃРјР°С‚СЂРёРІР°РµРјРѕРіРѕ СЂРµР±СЂР° РїСЂРё Р°Р»РіРѕСЂРёС‚РјРµ Р¤Р‘
-	int s; 			//РёСЃС…РѕРґРЅР°СЏ РІРµСЂС€РёРЅР°
-	//int p[]; 		//РґР»СЏ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РїСѓС‚РµР№
-	boolean any, alg;	//РґР»СЏ Р°Р»РіРѕСЂРёС‚РјР° Р¤Р‘\
+	static int INF = 1400;		//число, принимаемое за бесконечность
+	static int MAX = 50;		//макс. число вершин
+	static int rad = 20;		//радиус вершины
+	int n; 			//число вершин
+	int m; 			//число ребер
+	int k, u, v; 	//счетчика для алгоритма ФБ.
+	int dl[]; 		//массив из временных пометок
+	int consEdge;   //номер рассматриваемого ребра при алгоритме ФБ
+	int s; 			//исходная вершина
+	//int p[]; 		//для восстановления путей
+	boolean any, alg;	//для алгоритма ФБ\
 	boolean changes;
-	Node e; 		//СЃСЃС‹Р»РєР° РЅР° РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° СЂРµР±РµСЂ
-	Vert vert[];		//РјР°СЃСЃРёРІ РёР· РІРµСЂС€РёРЅ
+	Node e; 		//ссылка на начало списка ребер
+	Vert vert[];		//массив из вершин
 	
-	class Node 			//РєР»Р°СЃСЃ - СЃРїРёСЃРѕРє СЂРµР±РµСЂ.
+	class Node 			//класс - список ребер.
 	{
 		int a, b, w; 	//a->b, weight = w
-		int color;		//С†РІРµС‚ СЂРµР±СЂР°
-		Node next; 		//СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РµРґСѓСЋС‰РёР№ СЌР». СЃРїРёСЃРєР°
+		int color;		//цвет ребра
+		Node next; 		//указатель на следующий эл. списка
 		
-		public Node(int u, int v, int weight)  //СЃРѕР·РґР°РЅРёРµ СЂРµР±СЂР° u->v СЃ РІРµСЃРѕРј weight, С†РІРµС‚ = 0
+		public Node(int u, int v, int weight)  //создание ребра u->v с весом weight, цвет = 0
 		{
 			a = u;
 			b = v;
@@ -406,10 +406,10 @@ class Graph
 		{
 			color = new_color;
 		}
-		public Node getNode(int i)	//РІРѕР·РІСЂР°С‰Р°РµС‚ СЌР». СЃ РЅРѕРјРµСЂРѕРј i, РµСЃР»Рё С‚Р°РєРѕРіРѕ РЅРµС‚, С‚Рѕ null
+		public Node getNode(int i)	//возвращает эл. с номером i, если такого нет, то null
 		{
-			int j = 0;		//СЃС‡РµС‚С‡РёРє
-			Node p = e; 	//СЃСЃС‹Р»РєР° РЅР° РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР°
+			int j = 0;		//счетчик
+			Node p = e; 	//ссылка на начало списка
 			while ( (j < i) && (p != null))
 			{
 				j++;
@@ -418,10 +418,10 @@ class Graph
 			return p;
 		}
 	};
-	class Vert 		//РєР»Р°СЃСЃ - С‚РѕС‡РєР°
+	class Vert 		//класс - точка
 	{
-		int x,y; //РєРѕРѕСЂРґРёРЅР°С‚С‹
-		int color; //С†РІРµС‚ РІРµСЂС€РёРЅС‹
+		int x,y; //координаты
+		int color; //цвет вершины
 		public Vert(int X, int Y, int Color)
 		{
 			x = X;
@@ -450,7 +450,7 @@ class Graph
 			return y;
 		}
 	}
-	public Graph() 		//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	public Graph() 		//конструктор
 	{
 		n = 0;
 		m = 0;
@@ -460,10 +460,10 @@ class Graph
 		for (int i = 0; i < MAX; i++)
 			vert[i] = new Vert();
 		e = null;
-		alg = false; //Р°Р»РіРѕСЂРёС‚Рј РЅРµ Р·Р°РїСѓС‰РµРј
+		alg = false; //алгоритм не запущем
 		changes = false;
 	}
-	public Graph(int number) //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	public Graph(int number) //конструктор
 	{
 		n = number;
 		m = 0;
@@ -474,29 +474,29 @@ class Graph
 			vert[i] = new Vert();
 		
 		e = null;
-		alg = false; //Р°Р»РіРѕСЂРёС‚Рј РЅРµ Р·Р°РїСѓС‰РµРј
+		alg = false; //алгоритм не запущем
 		changes = false;
 	}
 	
 	public Graph(File file)
 	throws IOException
 	{
-		int x, y, z; //РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ РёР· С„Р°Р№Р»Р°
+		int x, y, z; //для считывания из файла
 		BufferedReader fin = new BufferedReader (new FileReader(file));
-		n = Integer.parseInt( fin.readLine() ); //СЃС‡РёС‚Р°Р»Рё С‡РёСЃР»Рѕ РІРµСЂС€РёРЅ
-		int edges = Integer.parseInt( fin.readLine() ); //СЃС‡РёС‚Р°Р»Рё С‡РёСЃР»Рѕ СЂРµР±РµСЂ
-		dl = new int[MAX];	//СЃРѕР·РґР°Р»Рё РјР°СЃСЃРёРІ РїРѕРјРµС‚РѕРє
+		n = Integer.parseInt( fin.readLine() ); //считали число вершин
+		int edges = Integer.parseInt( fin.readLine() ); //считали число ребер
+		dl = new int[MAX];	//создали массив пометок
 		//p = new int[MAX];
-		vert = new Vert[MAX];	//РјР°СЃСЃРёРІ РёР· РєРѕРѕСЂРґРёРЅР°С‚ РІРµСЂС€РёРЅ
+		vert = new Vert[MAX];	//массив из координат вершин
 		for (int i = 0; i < MAX; i++)
 			vert[i] = new Vert();
 		
-		e = null; 		//СЃРїРёСЃРѕРє СЂРµР±РµСЂ
-		alg = false; 	//Р°Р»РіРѕСЂРёС‚Рј РЅРµ Р·Р°РїСѓС‰РµРј
+		e = null; 		//список ребер
+		alg = false; 	//алгоритм не запущем
 		changes = false;
 		String tmp = "";
 		String val = "";
-		for (int i = 0; i < edges; i++) //СЃС‡РёС‚С‹РІР°РЅРёРµ СЃРїРёСЃРєР° СЂРµР±РµСЂ
+		for (int i = 0; i < edges; i++) //считывание списка ребер
 		{
 			tmp = fin.readLine();
 			int len = tmp.length();
@@ -506,35 +506,35 @@ class Graph
 			{
 				j2++;
 			}
-			//j1 = РЅР°С‡Р°Р»Рѕ С‡РёСЃР»Р°
-			//j2 = РёРЅРґРµРєСЃ РїСЂРѕР±РµР»Р°-1
+			//j1 = начало числа
+			//j2 = индекс пробела-1
 			val = tmp.substring(0, j2);
-			x = Integer.parseInt(val);		//РїРµСЂРІР°СЏ РІРµСЂС€РёРЅР°
+			x = Integer.parseInt(val);		//первая вершина
 			
 			j1 = ++j2;
-			//СЃС‡РёС‚С‹РІР°РЅРёРµ РІС‚РѕСЂРѕР№ РІРµСЂС€РёРЅС‹
+			//считывание второй вершины
 			while ((tmp.charAt(j2) != ' ') && (j2 < len-1))
 			{
 				j2++;
 			}
 			val = tmp.substring(j1, j2);
-			y = Integer.parseInt(val);		//РІС‚РѕСЂР°СЏ РІРµСЂС€РёРЅР°
+			y = Integer.parseInt(val);		//вторая вершина
 			
 			j1 = ++j2;
-			//СЃС‡РёС‚С‹РІР°РµРЅРёРµ РІРµСЃР°
+			//считываение веса
 			while ((j2 < len) && (tmp.charAt(j2) != ' '))
 			{
 				j2++;
 			}
 			val = tmp.substring(j1, j2);
-			z = Integer.parseInt(val);		//РІРµСЃ
+			z = Integer.parseInt(val);		//вес
 			
-			addEdge(x, y, z);	//РґРѕР±Р°РІР»РµРЅРёРµ СЂРµР±СЂР°
+			addEdge(x, y, z);	//добавление ребра
 		}
 		
-		/*Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚ РІРµСЂС€РёРЅ
-		vert[0].x = 500;		//СЏ С‚Р°Рє Р·Р°С…РѕС‚РµР»
-		vert[0].y = 70;			//СЏ С‚Р°Рє Р·Р°С…РѕС‚РµР»
+		/*Формирование координат вершин
+		vert[0].x = 500;		//я так захотел
+		vert[0].y = 70;			//я так захотел
 		double dx, dy;
 		for (int i = 1; i < n; i++)
 		{//radius = 450
@@ -543,10 +543,10 @@ class Graph
 			vert[i].x = vert[i-1].x + (int)dx;
 			vert[i].y = vert[i-1].y + (int)dy;
 		}
-		//РµСЃР»Рё РЅРµ СЂР°Р±РѕС‚Р°РµС‚, С‚Рѕ РѕР¶РёРґР°РµРјРѕ
+		//если не работает, то ожидаемо
 		*/
 		int CentrX=250, CentrY=250;
-		double angle = 6.2831853/n; //РІС‹С‡РёР»РµРЅРёРµ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ РІРµСЂС€РёРЅ
+		double angle = 6.2831853/n; //вычиление расположения вершин
 		double nextangle = 0;
 		int R = 200;
 		int x_c, y_c;
@@ -559,13 +559,13 @@ class Graph
 		fin.close();
 	}
 	
-	public void addVert() 						//РґРѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ РІРµСЂС€РёРЅС‹ РІ РіСЂР°С„
+	public void addVert() 						//добавление новой вершины в граф
 	{
 		if (n >= MAX) return;
 		dl[n] = INF;
 		n++;
 	}
-	public void addVert(int x, int y) 			//РґРѕР±Р°РІР»РµРЅРёРµ РІРµСЂС€РёРЅС‹ РІ РіСЂР°С„, x,y - РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+	public void addVert(int x, int y) 			//добавление вершины в граф, x,y - координаты вершины
 	{
 		if (n >= MAX) return;
 		dl[n] = INF;
@@ -574,35 +574,35 @@ class Graph
 		changes = true;
 		n++;
 	}
-	public void addEdge(int u, int v, int w) 	//РґРѕР±Р°РІР»РµРЅРёРµ СЂРµР±СЂР° РІ РіСЂР°С„
+	public void addEdge(int u, int v, int w) 	//добавление ребра в граф
 	{
 		if (u == v) return;
-		u--; v--; 		//РІРЅРµС€РЅСЏСЏ РЅСѓРјРµСЂР°С†РёСЏ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ 1
+		u--; v--; 		//внешняя нумерация начинается с 1
 		changes = true;
-		if (e == null)  //РµСЃР»Рё СЃРїРёСЃРѕРє РїСѓСЃС‚
+		if (e == null)  //если список пуст
 		{ 	
 			e = new Node(u,v,w);
 			m++;
 			return;
 		}
 		
-		Node newNode = e;  //СЃСЃС‹Р»РєСѓ РЅР° СЃРїРёСЃРѕРє СЃС‚Р°РІРёРј РІ РЅР°С‡Р°Р»Рѕ
+		Node newNode = e;  //ссылку на список ставим в начало
 
-		//РёРґРµРј РґРѕ РєРѕРЅС†Р° СЃРїРёСЃРєР°
+		//идем до конца списка
 		while (newNode.next != null )
 		{	
-			if ( newNode.a == u && newNode.b == v) return; //РЅР°С€Р»Рё СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ РІРµСЂС€РёРЅСѓ
+			if ( newNode.a == u && newNode.b == v) return; //нашли существующую вершину
 			newNode = newNode.next;
 		}
 		
 		if (newNode.next == null)
 		{
-			newNode.next = new Node(u,v,w); //СЃРѕР·РґР°РµРј Р·Р°РїРёСЃСЊ
+			newNode.next = new Node(u,v,w); //создаем запись
 			m++;
 		}
 	}
 
-	public void draw_dl() 						//РІС‹РІРѕРґ РїРѕРјРµС‚РѕРє РЅР° РєРѕРЅСЃРѕР»СЊ
+	public void draw_dl() 						//вывод пометок на консоль
 	{
 		for (int i = 0; i < n; i++)
 			if (dl[i] < INF)
@@ -611,20 +611,20 @@ class Graph
 				System.out.print(" inf ");
 		//System.out.println();
 	}
-	public void drawGraph(Graphics g1) 			//РІС‹РІРѕРґ СЂРµР±РµСЂ РЅР° РєРѕРЅСЃРѕР»СЊ
+	public void drawGraph(Graphics g1) 			//вывод ребер на консоль
 	{
 		g1.setColor(Color.WHITE);
 		if (changes)
 			g1.fillRect(0, 0, 1100-350, 900);
 		changes = false;
 		Graphics2D g = (Graphics2D)g1;
-		//РЅСѓР¶РЅРѕ СЂРёСЃРѕРІР°С‚СЊ РЅР° Р±РµР»РѕРј-Р±РµР»РѕРј РїРѕРєСЂС‹РІР°Р»Рµ СЏРЅРІР°СЂСЏ
+		//нужно рисовать на белом-белом покрывале января
 		//g.drawOval(10, 10, 50, 50);
 		Font myFont = new Font("Arial", Font.BOLD, 16);
-		g.setFont(myFont); 			//СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С€СЂРёС„С‚
+		g.setFont(myFont); 			//устанавливаем шрифт
 		g.setStroke(new BasicStroke(2) );
 		String myStr = "";
-		/*РїСЂРѕСЂРёСЃРѕРІРєР° РІРµСЂС€РёРЅ*/
+		/*прорисовка вершин*/
 		for (int i = 0; i < n; i++)
 		{
 			int x = vert[i].x - rad;
@@ -633,96 +633,96 @@ class Graph
 			
 			switch(vert[i].color)
 			{
-			case 1:		//СЂРёСЃРѕРІР°С‚СЊ СЃРёРЅРёРј
+			case 1:		//рисовать синим
 				g.setColor(Color.BLUE);
 				break;
-			case 2:		//СЂРёСЃРѕРІР°С‚СЊ РєСЂР°СЃРЅС‹Рј
+			case 2:		//рисовать красным
 				g.setColor(Color.RED);
 				break;
-			case 3:		//СЂРёСЃРѕРІР°С‚СЊ Р·РµР»РµРЅС‹Рј
+			case 3:		//рисовать зеленым
 				g.setColor(Color.GREEN);
 				break;
-			default: //СЂРёСЃРѕРІР°С‚СЊ С‡РµСЂРЅС‹Рј
+			default: //рисовать черным
 				g.setColor(Color.BLACK);
 				break;
 			}
 			
-			g.drawOval(x, y, 2*rad, 2*rad);			//РІРїРёСЃС‹РІР°РµРј РІ РєРІР°РґСЂР°С‚ СЃРѕ СЃС‚РѕСЂРѕРЅРѕР№ РІ 2 СЂР°РґРёСѓСЃР°
-			g.drawString(myStr, x + 15 , y + 20 );	//СЂРёСЃСѓРµРј РІРЅСѓС‚СЂРё РЅРѕРјРµСЂ РІРµСЂС€РёРЅС‹
+			g.drawOval(x, y, 2*rad, 2*rad);			//вписываем в квадрат со стороной в 2 радиуса
+			g.drawString(myStr, x + 15 , y + 20 );	//рисуем внутри номер вершины
 			
-			if (alg)		//РµСЃР»Рё Р°Р»РіРѕСЂРёС‚Рј Р·Р°РїСѓС‰РµРЅ
-			{//СЂРёСЃСѓРµРј РїРѕРјРµС‚РєРё РЅР°Рґ РІРµСЂС€РёРЅР°РјРё
+			if (alg)		//если алгоритм запущен
+			{//рисуем пометки над вершинами
 				g.setColor(Color.RED);
 				if (dl[i] < INF) myStr = Integer.toString(dl[i]);
 				else myStr = "inf";
 				g.drawString(myStr, x + 15, y - 10);
 			}
 		}
-		/*РїСЂРѕСЂРёСЃРѕРІРєР° СЂРµР±РµСЂ*/
+		/*прорисовка ребер*/
 		for (int j = 0; j < m; j++)
 		{
 			int x1,y1,x2,y2;
-			/*1 С‚РѕС‡РєР° (p1)*/
+			/*1 точка (p1)*/
 			x1 = vert[ e.getNode(j).a ].x;
 			y1 = vert[ e.getNode(j).a ].y;
-			/*2 С‚РѕС‡РєР° (p2)*/
+			/*2 точка (p2)*/
 			x2 = vert[ e.getNode(j).b ].x;
 			y2 = vert[ e.getNode(j).b ].y;
 			
-			//СЂР°СЃСЃС‚Р°РЅРѕРІРєР° С‚РѕС‡РµРє РЅР°С‡Р°Р»Р° Рё РєРѕРЅС†Р° СЂРµР±РµСЂ
-			if ( x1 <= x2) //p1 СЃР»РµРІР° РѕС‚ p2
+			//расстановка точек начала и конца ребер
+			if ( x1 <= x2) //p1 слева от p2
 			{
-				if (y1 <= y2) //p1 РЅРёР¶Рµ p2
+				if (y1 <= y2) //p1 ниже p2
 				{
 					y1 += rad;
 					x2 -= rad;
 				}
 				else
-				{//(p1.Y > p2.Y)   //p1 РІС‹С€Рµ p2
+				{//(p1.Y > p2.Y)   //p1 выше p2
 					y1 -= rad;
 					x2 -= rad;
 				}
 			}
 			else
-			// (p1.X > p2.X) //p1 СЃРїСЂР°РІР° РѕС‚ p2
+			// (p1.X > p2.X) //p1 справа от p2
 			{
-				if (y1 < y2)    //p1 РЅРёР¶Рµ p2
+				if (y1 < y2)    //p1 ниже p2
 				{
 					y1 += rad;
 					x2 += rad;
 				}
 				else  
-				{//(p1.Y > p2.Y)   //p1 РІС‹С€Рµ p2
+				{//(p1.Y > p2.Y)   //p1 выше p2
 					y1 -= rad;
 					x2 += rad;
 				}
 			}
 			switch( e.getNode(j).color )
 			{
-			case 1:		//СЂРёСЃРѕРІР°С‚СЊ СЃРёРЅРёРј
+			case 1:		//рисовать синим
 				g.setColor(Color.CYAN);
 				break;
-			case 2:		//СЂРёСЃРѕРІР°С‚СЊ РєСЂР°СЃРЅС‹Рј
+			case 2:		//рисовать красным
 				g.setColor(Color.RED);
 				break;
-			case 3:		//СЂРёСЃРѕРІР°С‚СЊ Р·РµР»РµРЅС‹Рј
+			case 3:		//рисовать зеленым
 				g.setColor(Color.GREEN);
 				break;
-			default: //СЂРёСЃРѕРІР°С‚СЊ С‡РµСЂРЅС‹Рј
+			default: //рисовать черным
 				g.setColor(Color.BLACK);
 				break;
 			}
-			g.drawLine(x1, y1, x2, y2); //РЅР°СЂРёСЃРѕРІР°С‚СЊ СЃС‚СЂРµР»РєСѓ
+			g.drawLine(x1, y1, x2, y2); //нарисовать стрелку
 			myStr = Integer.toString(e.getNode(j).w);
 			int x = Math.abs(x2 + x1)/2;
 			int y = Math.abs(y2 + y1)/2;
 			g.drawString(myStr, x + 15, y + 15);
-			/*СЃС‚СЂРµР»РєР°*/
+			/*стрелка*/
 			Polygon a = new Polygon();
 			a.addPoint(x2, y2);
 			double beta = Math.atan2(y1 - y2, x2 - x1); 
 			double alfa = Math.PI/10;
-			int len = 15; //РґР»РёРЅР°
+			int len = 15; //длина
 			x = (int)Math.round(x2 - len*Math.cos(beta+alfa));
 			y = (int)Math.round(y2 + len*Math.sin(beta+alfa));
 			//g.drawLine(x2, y2, x, y);
@@ -738,7 +738,7 @@ class Graph
 		}
 	}
 	
-	public int isInVert(int X, int Y)			//РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ РІС‹Р±СЂР°РЅРЅРѕР№ РІРµСЂС€РёРЅС‹
+	public int isInVert(int X, int Y)			//возвращает номер выбранной вершины
 	{
 		double dist = 0;
 		for (int i = 0; i < n; i++)
@@ -751,7 +751,7 @@ class Graph
 		}
 		return 0;
 	}
-	public boolean isToClose(int X, int Y)		//true - С‚РѕС‡РєР° СЃР»РёС€РєРѕРј Р±Р»РёР·РєРѕ Рє РґСЂСѓРіРѕР№ РІРµСЂС€РёРЅРµ
+	public boolean isToClose(int X, int Y)		//true - точка слишком близко к другой вершине
 	{
 		if (n == 0) return false;
 		double dist = 0;
@@ -766,32 +766,32 @@ class Graph
 		return false;
 	}
 	
-	public int[] get_table() 	//РІРѕР·РІСЂР°С‰Р°РµС‚ СЃСЃС‹Р»РєСѓ РЅР° РјР°СЃСЃРёРІ РїРѕРјРµС‚РѕРє
+	public int[] get_table() 	//возвращает ссылку на массив пометок
 	{
 		return dl;
 	}
-	public String getEdge()			//РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє СЂРµР±РµСЂ РІ РІРёРґРµ СЃС‚СЂРѕРєРё
+	public String getEdge()			//возвращает список ребер в виде строки
 	{
 		String res = "";
 		Node ptr = e;
 		while (ptr != null)
 		{
-			res += "[ " + (ptr.a + 1) + ", " + (ptr.b + 1) + " ], РІРµСЃ=" + ptr.w + "\n"; 
+			res += "[ " + (ptr.a + 1) + ", " + (ptr.b + 1) + " ], вес=" + ptr.w + "\n"; 
 			ptr = ptr.next;
 		}
 		return res;
 	}
-	public int getN()				//РІРѕР·РІСЂР°С‰Р°РµС‚ С‡РёСЃР»Рѕ РІРµСЂС€РёРЅ
+	public int getN()				//возвращает число вершин
 	{
 		return n;
 	}
-	public String getEdges()		//РІРѕР·РІСЂР°С‰Р°РµС‚ РїСЂРѕСЃРјР°С‚РёРІР°РµРјРѕРµ СЂРµР±СЂРѕ
+	public String getEdges()		//возвращает просмативаемое ребро
 	{
 		String res = "[ " + (e.getNode(consEdge).a+1) + ", " + (e.getNode(consEdge).b+1) + " ]";
 		return res;
 	}
 	
-	public int getStep()			//РІРѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ С€Р°РіР°
+	public int getStep()			//возвращает номер шага
 	{
 		return k;
 	}
@@ -800,75 +800,75 @@ class Graph
 	{
 		return alg;
 	}
-	public int getM()	//РІРѕР·РІСЂР°С‰Р°РµС‚ С‡РёСЃР»Рѕ СЂРµР±РµСЂ
+	public int getM()	//возвращает число ребер
 	{
 		return m;
 	}
 
-	public boolean isNegativeCycle(int source)		//true - РІ РіСЂР°С„Рµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№ С†РёРєР» 
+	public boolean isNegativeCycle(int source)		//true - в графе отрицательный цикл 
 	{
-		/*РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ*/
+		/*Инициализация*/
 		for (int i = 0; i < n; i++)
 			dl[i] = INF;
 		dl[source - 1] = 0;					
 		
-		/*Р’С‹РїРѕР»РЅСЏРµРј Р°Р»РіРѕСЂРёС‚Рј Р¤Р‘ n-1 СЂР°Р·*/
+		/*Выполняем алгоритм ФБ n-1 раз*/
 		for (int i = 0; i < n-1; i++)
 		{
 			for (int j = 0; j < m; j++)
 				if (dl[ e.getNode(j).a] < INF )
 				{
 					dl[ e.getNode(j).b ] =  
-					min( dl[ e.getNode(j).b ], (dl [ e.getNode(j).a ] + e.getNode(j).w)); // СЂРµР»Р°РєСЃР°С†РёСЏ
-					//Р’РќРЈРўР Р РњР•РќРЇР•РўРЎРЇ any !!РќР• РўР РћР“РђРўР¬!!
+					min( dl[ e.getNode(j).b ], (dl [ e.getNode(j).a ] + e.getNode(j).w)); // релаксация
+					//ВНУТРИ МЕНЯЕТСЯ any !!НЕ ТРОГАТЬ!!
 				}
 		}
-		/*Р’С‹РїРѕР»РЅСЏРµРј Р°Р»РіРѕСЂРёС‚Рј Р¤Р‘ n-С‹Р№ СЂР°Р·, РµСЃР»Рё С‡С‚Рѕ-С‚Рѕ РёР·РјРµРЅРёР»РѕСЃСЊ, С‚Рѕ РІ РіСЂР°С„Рµ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№ С†РёРєР»*/
+		/*Выполняем алгоритм ФБ n-ый раз, если что-то изменилось, то в графе отрицательный цикл*/
 		any = false;
 		for (int j = 0; j < m; j++)
 			if (dl[ e.getNode(j).a] < INF )
 			{
 				dl[ e.getNode(j).b ] =  
-				min( dl[ e.getNode(j).b ], (dl [ e.getNode(j).a ] + e.getNode(j).w)); // СЂРµР»Р°РєСЃР°С†РёСЏ
-				//Р’РќРЈРўР Р РњР•РќРЇР•РўРЎРЇ any !!РќР• РўР РћР“РђРўР¬!!
+				min( dl[ e.getNode(j).b ], (dl [ e.getNode(j).a ] + e.getNode(j).w)); // релаксация
+				//ВНУТРИ МЕНЯЕТСЯ any !!НЕ ТРОГАТЬ!!
 			}
-		return any; //any == true, РєРѕРіРґР° РµСЃС‚СЊ РёР·РјРµРЅРµРЅРёРµ.
+		return any; //any == true, когда есть изменение.
 	}
 	
-	public boolean step() 		//С€Р°Рі Р°Р»РіРѕСЂРёС‚РјР° С„-Р±.
+	public boolean step() 		//шаг алгоритма ф-б.
 	{
 		changes = true;
 		vert[ e.getNode(consEdge).b ].setColor(0);
 		e.getNode(consEdge).setColor(0);
-		consEdge = v; //СЃРѕС…СЂР°РЅРёР»Рё РЅРѕРјРµСЂ СЂР°СЃСЃРјР°С‚СЂРёРІР°РµРјРѕРіРѕ СЂРµР±СЂР°
+		consEdge = v; //сохранили номер рассматриваемого ребра
 		vert[ e.getNode(v).b ].setColor(2);
-		e.getNode(v).setColor(2);	//РѕРєСЂР°СЃРёР»Рё РІ РєСЂР°СЃРЅС‹Р№ С†РІРµС‚
+		e.getNode(v).setColor(2);	//окрасили в красный цвет
 		if (v < m) 
 		{
 			if (dl[ e.getNode(v).a] < INF )
 			{
 				
 				dl[ e.getNode(v).b ] =  
-				min( dl[ e.getNode(v).b ], (dl [ e.getNode(v).a ] + e.getNode(v).w)); // СЂРµР»Р°РєСЃР°С†РёСЏ
-				//Р’РќРЈРўР Р РњР•РќРЇР•РўРЎРЇ any !!РќР• РўР РћР“РђРўР¬!!
+				min( dl[ e.getNode(v).b ], (dl [ e.getNode(v).a ] + e.getNode(v).w)); // релаксация
+				//ВНУТРИ МЕНЯЕТСЯ any !!НЕ ТРОГАТЬ!!
 			}
 			v++;
 			if (v >= m)
-			{//РџСЂРѕРІРµР»Рё СЂРµР»Р°РєСЃР°С†РёСЋ РїРѕ РІСЃРµРј СЂРµР±СЂР°Рј (Р·Р°РєРѕРЅС‡РёР»Рё С€Р°Рі)
+			{//Провели релаксацию по всем ребрам (закончили шаг)
 				
 				k++;
 				v= 0;	
 				if (any && (k < n-1)) 
-				{//any = true -> С‡С‚Рѕ-С‚Рѕ РїРѕРјРµРЅСЏР»РѕСЃСЊ, Р°Р»РіРѕСЂРёС‚Рј РЅРµ Р·Р°РєРѕРЅС‡РµРЅ
+				{//any = true -> что-то поменялось, алгоритм не закончен
 					any = false;
 					return false;
 				}
 				v = 0;
 				return true;
-				//РµСЃР»Рё any = false -> СЃРѕСЃС‚РѕСЏРЅРёРµ СЃРѕС…СЂР°РЅРёР»РѕСЃСЊ, Р°Р»РіРѕСЂРёС‚Рј РЅР°С€РµР» РѕС‚РІРµС‚
+				//если any = false -> состояние сохранилось, алгоритм нашел ответ
 			}
 		}
-		return false; // Р°Р»РіРѕСЂРёС‚Рј РЅРµ Р·Р°РєРѕРЅС‡РµРЅ
+		return false; // алгоритм не закончен
 	}
 	public void Ford_Bellman(int source)
 	{
